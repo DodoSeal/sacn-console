@@ -42,11 +42,7 @@ for (let key of keypad) {
 
         if (key.value == "Off" || key.value == "Enter" || key.value == "Clear") return;
 
-        if (cmdBar.value == "") {
-            
-        } else {
-            
-        };
+        
     });
 };
 
@@ -60,4 +56,5 @@ function sendOsc(data) {
     window.app.sendOsc(data);
 };
 
+window.sendDMX = sendDMX;
 window.sendOsc = sendOsc;
