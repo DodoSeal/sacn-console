@@ -3,7 +3,7 @@ const { Sender } = require('sacn');
 
 const server = new Sender({
     universe: 1,
-    minRefreshRate: 5
+    minRefreshRate: 1
 });
 
 async function send(data) {

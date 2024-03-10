@@ -1,11 +1,11 @@
 // Start Streaming DMX Values
-//sendDMX({});
+sendDMX({});
 
 const cmdBar = document.getElementById('cmd-bar');
 const keypad = [
     document.getElementById('key-thru'),
     document.getElementById('key-off'),
-    document.getElementById('key-plus'),
+    document.getElementById('key-clear'),
     document.getElementById('key-1'),
     document.getElementById('key-2'),
     document.getElementById('key-3'),
@@ -28,21 +28,36 @@ for (let key of keypad) {
             case "Off":
                 sendDMX({});
                 break;
+            case "Clear":
+                cmdBar.value = "";
+                break;
             case "Enter":
                 if (cmdBar.value == "") return;
-
-                cmdBar.value = "";
+                
+                cmdBar.value += "*";
                 sendDMX(payload);
+                payload = {};
                 break;
         };
 
-        if (key.value !== "Off" || key.value !== "Enter") {
-            cmdBar.value += key.value + " ";
+        if (key.value == "Off" || key.value == "Enter" || key.value == "Clear") return;
+
+        if (cmdBar.value == "") {
+            
+        } else {
+            
         };
     });
 };
 
 function sendDMX(data) {
     console.log("Sending DMX: ", data);
-    window.sacn.send(data);
+    window.app.send(data);
 };
+
+function sendOsc(data) {
+    console.log("Sending OSC: ", data);
+    window.app.sendOsc(data);
+};
+
+window.sendOsc = sendOsc;

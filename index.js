@@ -1,7 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, net } = require('electron');
 const path = require('path');
+const sacn = require('./handlers/sacn');
+const network = require('./handlers/network-scan');
+const oscHandler = require('./handlers/osc');
 
-const createWindow = () => {
+let eosConsole;
+
+const createWindow = async () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
@@ -11,6 +16,14 @@ const createWindow = () => {
     });
 
     win.loadFile('src/index.html');
+
+    const device = await network.findEos();
+    eosConsole = {
+        ip: device.Address,
+        name: device.Name
+    };
+
+    console.log("Found Eos Console: ", eosConsole);
 };
 
 app.whenReady().then(() => {
@@ -24,11 +37,16 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+    sacn.closeServer();
     app.quit();
 });
 
-const sacn = require('./handlers/sacn');
-
 ipcMain.on('send', (_event, message) => {
     sacn.send(message);
+});
+
+ipcMain.on('sendOsc', (_event, message) => {
+    if (eosConsole == null) return console.log("No Eos Console to communicate with.");
+
+    oscHandler.send(eosConsole.ip, 8000, `/eos${message}`);
 });

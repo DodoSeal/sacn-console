@@ -9,7 +9,9 @@
   "author": "Max McDaniel",
   "license": "ISC",
   "dependencies": {
+    "@juliendu11/network-devices-scanner-api": "^1.0.1",
     "electron": "^29.1.1",
+    "node-osc": "^9.1.1",
     "sacn": "^4.4.0"
   }
 }
