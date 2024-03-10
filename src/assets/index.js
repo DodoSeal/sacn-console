@@ -1,11 +1,48 @@
-window.sacn.send({});
+// Start Streaming DMX Values
+//sendDMX({});
 
-const button = document.getElementById('test');
+const cmdBar = document.getElementById('cmd-bar');
+const keypad = [
+    document.getElementById('key-thru'),
+    document.getElementById('key-off'),
+    document.getElementById('key-plus'),
+    document.getElementById('key-1'),
+    document.getElementById('key-2'),
+    document.getElementById('key-3'),
+    document.getElementById('key-4'),
+    document.getElementById('key-5'),
+    document.getElementById('key-6'),
+    document.getElementById('key-7'),
+    document.getElementById('key-8'),
+    document.getElementById('key-9'),
+    document.getElementById('key-at'),
+    document.getElementById('key-0'),
+    document.getElementById('key-enter')
+];
 
-button.addEventListener('click', (event) =>{
-    window.sacn.send({
-        1:100,
-        2:20,
-        3:30
+let payload = {};
+
+for (let key of keypad) {
+    key.addEventListener('click', (event) => {
+        switch(key.getAttribute('value')) {
+            case "Off":
+                sendDMX({});
+                break;
+            case "Enter":
+                if (cmdBar.value == "") return;
+
+                cmdBar.value = "";
+                sendDMX(payload);
+                break;
+        };
+
+        if (key.value !== "Off" || key.value !== "Enter") {
+            cmdBar.value += key.value + " ";
+        };
     });
-});
+};
+
+function sendDMX(data) {
+    console.log("Sending DMX: ", data);
+    window.sacn.send(data);
+};
