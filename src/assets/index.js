@@ -22,6 +22,7 @@ const keypad = [
 ];
 
 let payload = {};
+let lastKey;
 
 document.addEventListener('keypress', (event) => {
     let key = event.key;
@@ -86,15 +87,19 @@ for (let key of keypad) {
         switch(key.getAttribute('value')) {
             case "Release All":
                 sendDMX({});
+                cmdBar.value = "Release All*";
                 break;
             case "+":
+                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At") return;
+
                 cmdBar.value += " + ";
+                lastKey = key.value;
                 break;
             case "Clear":
                 cmdBar.value = "";
                 break;
             case "Enter":
-                if (cmdBar.value == "") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Thru") return;
                 
                 parse(cmdBar.value);
 
@@ -103,14 +108,16 @@ for (let key of keypad) {
                 payload = {};
                 break;
             case "At":
-                if (cmdBar.value == "") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "Thru") return;
                  
                 cmdBar.value += " @ ";
+                lastKey = key.value;
                 break;
             case "Thru":
-                if (cmdBar.value == "") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At") return;
                 
                 cmdBar.value += " Thru ";
+                lastKey = key.value;
                 break;
         };
 
@@ -123,6 +130,7 @@ for (let key of keypad) {
         };
 
         cmdBar.value += key.value;
+        lastKey = key.value;
     });
 };
 

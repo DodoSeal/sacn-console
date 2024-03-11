@@ -13,7 +13,7 @@ async function findEos() {
     for(let device of devices) {
         bigString += `${device.Address} | ${device.Name}\n`;
 
-        if (device.Name.includes("DESKTOP-")) {
+        if (device.Name.includes("ELEMENT-")) { // ELEMENT because I use an Element 2 console
             eosConsole = device;
         };
     };
