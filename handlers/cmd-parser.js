@@ -17,6 +17,8 @@ function parse(cmd) {
             };
         };
     };
+
+    return addresses;
 };
 
 module.exports = { parse };
