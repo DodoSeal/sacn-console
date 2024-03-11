@@ -90,7 +90,7 @@ for (let key of keypad) {
                 cmdBar.value = "Release All*";
                 break;
             case "+":
-                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At") return;
+                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At" || cmdBar.value.includes("@")) return;
 
                 cmdBar.value += " + ";
                 lastKey = key.value;
