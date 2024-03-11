@@ -1,7 +1,5 @@
 // Start Streaming DMX Values
-if (window.app) {
-    sendDMX({});
-};
+sendDMX({});
 
 const cmdBar = document.getElementById('cmd-bar');
 const keypad = [
@@ -19,7 +17,8 @@ const keypad = [
     document.getElementById('key-9'),
     document.getElementById('key-at'),
     document.getElementById('key-0'),
-    document.getElementById('key-enter')
+    document.getElementById('key-enter'),
+    document.getElementById('key-release')
 ];
 
 let payload = {};
@@ -28,6 +27,9 @@ document.addEventListener('keypress', (event) => {
     let key = event.key;
 
     switch(key) {
+        case "f":
+            cmdBar.value += " Full";
+            break;
         case "c":
             keypad[2].click();
             break;
@@ -73,16 +75,20 @@ document.addEventListener('keypress', (event) => {
         case "Enter":
             keypad[14].click();
             break;
+        case "r":
+            keypad[15].click();
+            break;
     };
 });
 
 for (let key of keypad) {
     key.addEventListener('click', (event) => {
         switch(key.getAttribute('value')) {
-            case "Space":
-                if (cmdBar.value == "") return;
-
-                cmdBar.value += " ";
+            case "Release All":
+                sendDMX({});
+                break;
+            case "+":
+                cmdBar.value += " + ";
                 break;
             case "Clear":
                 cmdBar.value = "";
@@ -98,15 +104,17 @@ for (let key of keypad) {
                 break;
             case "At":
                 if (cmdBar.value == "") return;
-                if (!cmdBar.value.endsWith(" ")) return;
+                 
+                cmdBar.value += " @ ";
                 break;
             case "Thru":
                 if (cmdBar.value == "") return;
-                if (!cmdBar.value.endsWith(" ")) return;
+                
+                cmdBar.value += " Thru ";
                 break;
         };
 
-        if (key.value == "Space" || key.value == "Enter" || key.value == "Clear") return;
+        if (key.value == "+" || key.value == "Release All" || key.value == "Enter" || key.value == "Clear" || key.value == "At" || key.value == "Thru") return;
         /* if (cmdBar.value.endsWith("u") || cmdBar.value.endsWith("t")) {
             keypad[1].click();
         }; */
@@ -119,18 +127,23 @@ for (let key of keypad) {
 };
 
 function sendDMX(data) {
+    if (!window.app) return;
+
     console.log("Sending DMX: ", data);
     window.app.send(data);
 };
 
 function sendOsc(data) {
+    if (!window.app) return;
+
     console.log("Sending OSC: ", data);
     window.app.sendOsc(data);
 };
 
 function parse(cmd) {
+    cmd = cmd.replace("+", " ");
     let args = cmd.split(" ");
-    let value = args[args.length - 1];
+    let value = args[args.length - 1].replace("Full", 100);
 
     if (value > 100) {
         value = 100;
@@ -148,6 +161,8 @@ function parse(cmd) {
             for (let num = argBefore; num <= argAfter; num++) {
                 payload[num] = value;
             };
+        } else if (arg == "Full") {
+            value = 100;
         };
     };
 };

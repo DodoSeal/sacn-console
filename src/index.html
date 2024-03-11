@@ -9,15 +9,14 @@
 </head>
 <body class="bg-slate-900">
     <div class="w-full h-full">
-        <h1 class="font-bold text-4xl text-center text-white mt-[5vh]">sACN Console</h1>
-        <div class="flex items-center place-content-center w-full h-full flex-col mt-[16vh]">
+        <div class="flex items-center place-content-center w-full h-full flex-col mt-[14vh]">
             <input id="cmd-bar" class="w-72 rounded-lg h-32 text-white bg-slate-800 cursor-default focus:outline-none mb-2 p-5 text-center font-semibold text-xl" type="text"
                 readonly>
-            <div class="flex flex-wrap w-72 [&_input]:h-16 [&_input]:w-[5rem] [&_input]:m-1 [&_input]:rounded-lg place-content-center" id="keypad">
+            <div class="flex flex-wrap w-72 [&_input]:h-16 [&>input]:w-[5rem] [&_input]:m-1 [&_input]:rounded-lg place-content-center" id="keypad">
                 <input id="key-thru" class="bg-blue-600 text-white transition-colors hover:bg-blue-500 focus:outline-none"
                     type="button" value="Thru">
                 <input id="key-space" class="bg-green-600 text-white transition-colors hover:bg-green-500 focus:outline-none"
-                    type="button" value="Space">
+                    type="button" value="+">
                 <input id="key-clear" class="bg-red-500 text-white transition-colors hover:bg-red-400 focus:outline-none"
                     type="button" value="Clear">
                 <input id="key-1" class="bg-slate-700 text-white transition-colors hover:bg-slate-600 focus:outline-none"
@@ -44,9 +43,12 @@
                     type="button" value="0">
                 <input id="key-enter" class="bg-yellow-500 text-white transition-colors hover:bg-yellow-400 focus:outline-none"
                     type="button" value="Enter">
+                <div>
+                    <input id="key-release" class="bg-red-500 w-[12rem] text-white transition-colors hover:bg-red-400 focus:outline-none"
+                        type="button" value="Release All">
+                </div>
             </div>
         </div>
-        <h1 class="font-thin text-xl text-center text-white mt-[3vh]">Made by Max McDaniel</h1>
     </div>
 </body>
 </html>
