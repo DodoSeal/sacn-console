@@ -3,6 +3,7 @@ const path = require('path');
 const sacn = require('./handlers/sacn');
 const network = require('./handlers/network-scan');
 const oscHandler = require('./handlers/osc');
+const presets = require('./handlers/presets');
 
 let eosConsole;
 
@@ -49,4 +50,11 @@ ipcMain.on('sendOsc', (_event, message) => {
     if (eosConsole == null) return console.log("No Eos Console to communicate with.");
 
     oscHandler.send(eosConsole.ip, 8000, `/eos${message}`);
+});
+
+ipcMain.on('writePreset', (_event, message) => {
+    let id = message.id;
+    let data = message.data;
+
+    presets.store(id, data);
 });

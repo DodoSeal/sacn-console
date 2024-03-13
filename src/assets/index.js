@@ -28,6 +28,11 @@ document.addEventListener('keypress', (event) => {
     let key = event.key;
 
     switch(key) {
+        case "p":
+            if (cmdBar.value !== "") return;
+
+            cmdBar.value += "Preset ";
+            break;
         case "f":
             if (lastKey !== "At") return;
 
@@ -155,6 +160,13 @@ function sendOsc(data) {
     window.app.sendOsc(data);
 };
 
+function storePreset(id, data) {
+    if (!window.app) return;
+
+    console.log("Writing Preset: ", id);
+    window.app.writePreset(id, data);
+};
+
 function parse(cmd) {
     cmd = cmd.replace("+", " ");
     let args = cmd.split(" ");
@@ -184,3 +196,4 @@ function parse(cmd) {
 
 window.sendDMX = sendDMX;
 window.sendOsc = sendOsc;
+window.storePreset = storePreset;
