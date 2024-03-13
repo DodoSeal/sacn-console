@@ -29,7 +29,12 @@ document.addEventListener('keypress', (event) => {
 
     switch(key) {
         case "f":
-            cmdBar.value += " Full";
+            if (lastKey !== "At") return;
+
+            cmdBar.value += "Full*";
+            parse(cmdBar.value);
+            sendDMX(payload);
+            lastKey = "Full";
             break;
         case "c":
             keypad[2].click();
@@ -90,7 +95,7 @@ for (let key of keypad) {
                 cmdBar.value = "Release All*";
                 break;
             case "+":
-                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At" || cmdBar.value.includes("@")) return;
+                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At" || lastKey == "Full" || cmdBar.value.includes("@")) return;
 
                 cmdBar.value += " + ";
                 lastKey = key.value;
@@ -99,7 +104,7 @@ for (let key of keypad) {
                 cmdBar.value = "";
                 break;
             case "Enter":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Thru") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Thru" || lastKey == "Full") return;
                 
                 parse(cmdBar.value);
 
@@ -108,13 +113,13 @@ for (let key of keypad) {
                 payload = {};
                 break;
             case "At":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "Thru") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "Thru" || lastKey == "Full") return;
                  
                 cmdBar.value += " @ ";
                 lastKey = key.value;
                 break;
             case "Thru":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Full") return;
                 
                 cmdBar.value += " Thru ";
                 lastKey = key.value;
@@ -151,7 +156,7 @@ function sendOsc(data) {
 function parse(cmd) {
     cmd = cmd.replace("+", " ");
     let args = cmd.split(" ");
-    let value = args[args.length - 1].replace("Full", 100);
+    let value = args[args.length - 1].replace("Full*", 100);
 
     if (value > 100) {
         value = 100;
