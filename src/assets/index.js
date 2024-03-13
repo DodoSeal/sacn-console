@@ -91,11 +91,13 @@ for (let key of keypad) {
     key.addEventListener('click', (event) => {
         switch(key.getAttribute('value')) {
             case "Release All":
+                if (lastKey == "Release All") return;
+
                 sendDMX({});
                 cmdBar.value = "Release All*";
                 break;
             case "+":
-                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "At" || lastKey == "Full" || cmdBar.value.includes("@")) return;
+                if (cmdBar.value == "" || lastKey == "Thru" || lastKey == "+" || lastKey == "At" || lastKey == "Full" || cmdBar.value.includes("@")) return;
 
                 cmdBar.value += " + ";
                 lastKey = key.value;
@@ -104,7 +106,7 @@ for (let key of keypad) {
                 cmdBar.value = "";
                 break;
             case "Enter":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Thru" || lastKey == "Full") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Thru" || lastKey == "Full" || lastKey == "Enter") return;
                 
                 parse(cmdBar.value);
 
@@ -113,13 +115,13 @@ for (let key of keypad) {
                 payload = {};
                 break;
             case "At":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "Thru" || lastKey == "Full") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "Thru" || lastKey == "Full" || lastKey == "At") return;
                  
                 cmdBar.value += " @ ";
                 lastKey = key.value;
                 break;
             case "Thru":
-                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Full") return;
+                if (cmdBar.value == "" || lastKey == "+" || lastKey == "At" || lastKey == "Full" || lastKey == "Thru") return;
                 
                 cmdBar.value += " Thru ";
                 lastKey = key.value;
